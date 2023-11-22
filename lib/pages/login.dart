@@ -1,10 +1,7 @@
-import 'package:carbonemissioncalculator/pagestate.dart';
-import 'package:http/http.dart' as http;
 import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
 import 'package:carbonemissioncalculator/pages/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'dart:convert';
 
 class Login extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
@@ -114,27 +111,5 @@ class Login extends StatelessWidget {
         );
       },
     );
-  }
-
-  void LoginVerification(BuildContext context, username, password) async {
-    var res = await http.post(
-      Uri.parse(API.login),
-      body: {
-        "username": username,
-        "password": password,
-      },
-    );
-
-    if (res.statusCode == 200 && res.body.isNotEmpty) {
-      var responseBodyOfLogin = jsonDecode(res.body);
-      if (responseBodyOfLogin['success'] == true) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyHomePage()),
-        );
-      } else {
-        ShowErrorDialog(context, "Invalid username or password");
-      }
-    }
   }
 }

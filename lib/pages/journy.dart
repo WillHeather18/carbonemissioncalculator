@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
 
 class Journeys extends StatefulWidget {
@@ -184,35 +182,6 @@ class JourneysState extends State<Journeys> {
       setState(() {
         selectedDate = picked;
       });
-    }
-  }
-
-  void submitJourney(BuildContext context, String vehicleType, String distance,
-      DateTime selectedDate) async {
-    var res = await http.post(
-      Uri.parse(API.addJourney),
-      body: {
-        "vehicleType": vehicleType,
-        "distance": distance,
-        "selectedDate": selectedDate.toString(),
-      },
-    );
-
-    if (res.statusCode == 200 && res.body.isNotEmpty) {
-      var responseBodyOfLogin = jsonDecode(res.body);
-      if (responseBodyOfLogin['success'] == true) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Journey added successfully')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Journey not added, please try again')),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Request failed, please try again')),
-      );
     }
   }
 }

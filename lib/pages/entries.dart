@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carbonemissioncalculator/widgets/monthselector.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
+import 'package:carbonemissioncalculator/tablerowdata.dart';
 
 class Entries extends StatefulWidget {
   const Entries({Key? key}) : super(key: key);
@@ -81,35 +80,14 @@ class _EntriesSectionState extends State<EntriesSection> {
   void didUpdateWidget(covariant EntriesSection oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedTime != widget.selectedTime) {
-      entries = getEntries();
-    }
-  }
-
-  Future<List<TableRowData>> getEntries() async {
-    var res = await http.post(
-      Uri.parse(API.getJournies),
-      body: {
-        "selectedDate": widget.selectedTime.toString(),
-      },
-    );
-
-    if (res.statusCode == 200 && res.body.isNotEmpty) {
-      var responseBody = json.decode(res.body);
-      if (responseBody is Map<String, dynamic> && responseBody['success']) {
-        List<TableRowData> tableRows = (responseBody['journeys'] as List)
-            .map((data) => TableRowData.fromJson(data))
-            .toList();
-        return tableRows;
-      } else {
-        return [];
-      }
-    } else {
-      throw Exception('Failed to load entries');
+      entries = getEntriesFromDate(widget.selectedTime);
+      setState(() {});
     }
   }
 
   Widget BuildTable(BuildContext context) {
-    Future<List<TableRowData>> entries = getEntries();
+    Future<List<TableRowData>> entries =
+        getEntriesFromDate(widget.selectedTime);
     return FutureBuilder<List<TableRowData>>(
       future: entries,
       builder:
@@ -152,6 +130,7 @@ class _EntriesSectionState extends State<EntriesSection> {
                     onChanged: (String? newValue) async {
                       entry.selectedType = newValue!;
                       EditEntry(context, entry);
+                      setState(() {});
                     },
                     items: const [
                       DropdownMenuItem(
@@ -191,6 +170,7 @@ class _EntriesSectionState extends State<EntriesSection> {
                       DateTime newDate = await selectDate(context, entry);
                       entry.selectedDate = newDate.toString();
                       EditEntry(context, entry);
+                      setState(() {});
                     },
                     child: Text(entry.date),
                   ),
@@ -200,6 +180,7 @@ class _EntriesSectionState extends State<EntriesSection> {
                     icon: const Icon(Icons.delete),
                     onPressed: () {
                       DeleteEntry(context, entry);
+                      setState(() {});
                     },
                   ),
                 ),
@@ -219,76 +200,8 @@ class _EntriesSectionState extends State<EntriesSection> {
     return picked ?? initialDate;
   }
 
-  void DeleteEntry(BuildContext context, TableRowData entry) async {
-    var res = await http.post(
-      Uri.parse(API.deleteJourney),
-      body: {
-        "id": entry.id,
-      },
-    );
-
-    if (res.statusCode == 200 && res.body.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Entry deleted successfully')));
-      setState(() {});
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to delete entry')));
-    }
-  }
-
-  void EditEntry(BuildContext context, TableRowData entry) async {
-    var res = await http.post(
-      Uri.parse(API.editJourney),
-      body: {
-        "id": entry.id,
-        "type": entry.selectedType ?? entry.type,
-        "distance": entry.selectedDistance ?? entry.distance,
-        "date": entry.selectedDate ?? entry.date,
-      },
-    );
-
-    if (res.statusCode == 200 && res.body.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Entry edited successfully')));
-      setState(() {});
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Failed to edit entry')));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return BuildTable(context);
-  }
-}
-
-class TableRowData {
-  final String id;
-  final String type;
-  String? selectedType;
-  final String distance;
-  String? selectedDistance;
-  final String date;
-  String? selectedDate;
-
-  TableRowData(
-      {required this.id,
-      required this.type,
-      this.selectedType,
-      required this.distance,
-      this.selectedDistance,
-      required this.date,
-      this.selectedDate});
-
-  factory TableRowData.fromJson(Map<String, dynamic> json) {
-    return TableRowData(
-      id: json['id'],
-      type: json['journey_type'],
-      selectedType: json['journey_type'],
-      distance: json['distance_travelled'],
-      date: json['journey_date'],
-    );
   }
 }

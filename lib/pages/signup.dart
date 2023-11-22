@@ -1,8 +1,6 @@
 import 'package:carbonemissioncalculator/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
 
 class Signup extends StatelessWidget {
@@ -107,56 +105,6 @@ class Signup extends StatelessWidget {
           ])),
         )
       ]),
-    );
-  }
-
-  void SignupVerification(
-      BuildContext context, username, password, repassword) async {
-    if (password == repassword) {
-      var res = await http.post(
-        Uri.parse(API.signup),
-        body: {
-          "username": username,
-          "password": password,
-        },
-      );
-
-      if (res.statusCode == 200 && res.body.isNotEmpty) {
-        var responseBodyOfLogin = jsonDecode(res.body);
-        if (responseBodyOfLogin['success'] == true) {
-          ShowErrorDialog(context, "Account created successfully");
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Login()),
-          );
-        } else {
-          ShowErrorDialog(context, "Error creating account");
-        }
-      } else {
-        ShowErrorDialog(context, "Error connecting to server");
-      }
-    } else {
-      ShowErrorDialog(context, "Passwords do not match");
-    }
-  }
-
-  void ShowErrorDialog(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
     );
   }
 }
