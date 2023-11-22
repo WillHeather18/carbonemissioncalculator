@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
 
 class Journeys extends StatefulWidget {
   const Journeys({super.key});
@@ -11,6 +14,7 @@ class Journeys extends StatefulWidget {
 class JourneysState extends State<Journeys> {
   String carType = 'Petrol Car';
   DateTime? selectedDate;
+  final TextEditingController distanceController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,7 @@ class JourneysState extends State<Journeys> {
             decoration: const BoxDecoration(color: Colors.white),
           ),
           Padding(
-              padding: EdgeInsets.only(top: 120),
+              padding: const EdgeInsets.only(top: 120),
               child: Center(
                   child: SizedBox(
                       width: 150,
@@ -82,29 +86,71 @@ class JourneysState extends State<Journeys> {
                                       )))
                             ],
                           ),
-                          const SizedBox(height: 75.0),
-                          const TextField(
-                            decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black),
+                          const SizedBox(height: 50.0),
+                          Column(
+                            children: [
+                              const Text(
+                                'Distance Travelled (km)',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              labelText: 'Distance',
-                            ),
+                              const SizedBox(height: 10.0),
+                              TextField(
+                                controller: distanceController,
+                                textAlign: TextAlign.center,
+                                decoration: const InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 75.0),
-                          OutlinedButton(
-                            onPressed: () => selectDate(context),
-                            style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.black,
-                              side: const BorderSide(
-                                  color: Colors.black, width: 1),
-                            ),
-                            child: Text(
-                              selectedDate != null
-                                  ? DateFormat('yyyy-MM-dd')
-                                      .format(selectedDate!)
-                                  : 'Select date',
-                            ),
+                          const SizedBox(height: 50.0),
+                          Column(
+                            children: [
+                              const Text(
+                                'Date',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 10.0),
+                              OutlinedButton(
+                                onPressed: () => selectDate(context),
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: Colors.black,
+                                  side: const BorderSide(
+                                      color: Colors.black, width: 1),
+                                ),
+                                child: Text(
+                                  selectedDate != null
+                                      ? DateFormat('yyyy-MM-dd')
+                                          .format(selectedDate!)
+                                      : 'Select date',
+                                ),
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 50.0),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (selectedDate != null &&
+                                  distanceController.text.isNotEmpty) {
+                                submitJourney(context, carType,
+                                    distanceController.text, selectedDate!);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Please select a date and enter a distance')),
+                                );
+                              }
+                            },
+                            child: const Text('Add Journey'),
                           )
                         ],
                       ))))
@@ -132,12 +178,41 @@ class JourneysState extends State<Journeys> {
       context: context,
       initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
+      lastDate: DateTime.now(),
     );
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
+    }
+  }
+
+  void submitJourney(BuildContext context, String vehicleType, String distance,
+      DateTime selectedDate) async {
+    var res = await http.post(
+      Uri.parse(API.addJourney),
+      body: {
+        "vehicleType": vehicleType,
+        "distance": distance,
+        "selectedDate": selectedDate.toString(),
+      },
+    );
+
+    if (res.statusCode == 200 && res.body.isNotEmpty) {
+      var responseBodyOfLogin = jsonDecode(res.body);
+      if (responseBodyOfLogin['success'] == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Journey added successfully')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Journey not added, please try again')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Request failed, please try again')),
+      );
     }
   }
 }

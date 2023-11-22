@@ -1,7 +1,6 @@
 import 'package:carbonemissioncalculator/pages/entries.dart';
 import 'package:carbonemissioncalculator/pages/home.dart';
 import 'package:carbonemissioncalculator/pages/journy.dart';
-import 'package:carbonemissioncalculator/pages/food.dart';
 import 'package:carbonemissioncalculator/pages/settings.dart';
 
 import 'package:flutter/material.dart';
@@ -13,13 +12,7 @@ class MyHomePage extends StatefulWidget {
 
 class PageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
-  final List<Widget> _pages = [
-    Overview(),
-    Food(),
-    Journeys(),
-    Entries(),
-    Settings()
-  ];
+  final List<Widget> _pages = [Overview(), Journeys(), Entries(), Settings()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -46,10 +39,6 @@ class PageState extends State<MyHomePage> {
                     BottomNavigationBarItem(
                         icon: Icon(Icons.pie_chart_outline),
                         label: 'Overview',
-                        backgroundColor: Color(0xFF04471C)),
-                    BottomNavigationBarItem(
-                        icon: Icon(Icons.food_bank_outlined),
-                        label: 'Food',
                         backgroundColor: Color(0xFF04471C)),
                     BottomNavigationBarItem(
                         icon: Icon(Icons.airplanemode_active),
