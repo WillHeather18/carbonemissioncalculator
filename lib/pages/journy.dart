@@ -1,80 +1,114 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Journeys extends StatefulWidget {
+  const Journeys({super.key});
+
   @override
   JourneysState createState() => JourneysState();
 }
 
 class JourneysState extends State<Journeys> {
   String carType = 'Petrol Car';
+  DateTime? selectedDate;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: appBar(context),
-        body: Container(
+        body: Stack(children: [
+          Container(
             decoration: const BoxDecoration(color: Colors.white),
-            child: GridView.count(
-              padding: EdgeInsets.only(top: 150, left: 50, right: 50),
-              crossAxisCount: 2,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 30,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Car Type',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    DropdownButton<String>(
-                      value: carType,
-                      underline: Container(height: 2, color: Colors.white),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          carType = newValue!;
-                        });
-                      },
-                      items: const [
-                        DropdownMenuItem(
-                          child: Text('Petrol Car'),
-                          value: 'Petrol Car',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Diesel Car'),
-                          value: 'Diesel Car',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Electric Car'),
-                          value: 'Electric Car',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Train'),
-                          value: 'Train',
-                        ),
-                        DropdownMenuItem(
-                          child: Text('Plane'),
-                          value: 'Plane',
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(45.0),
-                    ),
-                    filled: true,
-                    fillColor: Color(0xFF04471C),
-                  ),
-                ),
-              ],
-            )));
+          ),
+          Padding(
+              padding: EdgeInsets.only(top: 120),
+              child: Center(
+                  child: SizedBox(
+                      width: 150,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              const Text(
+                                'Vehicle Type',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 10.0),
+                              InputDecorator(
+                                  decoration: const InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.black),
+                                    ),
+                                  ),
+                                  child: SizedBox(
+                                      height: 15.0,
+                                      child: DropdownButtonHideUnderline(
+                                        child: DropdownButton<String>(
+                                          value: carType,
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              carType = newValue!;
+                                            });
+                                          },
+                                          items: const [
+                                            DropdownMenuItem(
+                                              value: 'Petrol Car',
+                                              child: Text('Petrol Car'),
+                                            ),
+                                            DropdownMenuItem(
+                                              value: 'Diesel Car',
+                                              child: Text('Diesel Car'),
+                                            ),
+                                            DropdownMenuItem(
+                                              value: 'Electric Car',
+                                              child: Text('Electric Car'),
+                                            ),
+                                            DropdownMenuItem(
+                                              value: 'Train',
+                                              child: Text('Train'),
+                                            ),
+                                            DropdownMenuItem(
+                                              value: 'Plane',
+                                              child: Text('Plane'),
+                                            ),
+                                          ],
+                                        ),
+                                      )))
+                            ],
+                          ),
+                          const SizedBox(height: 75.0),
+                          const TextField(
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                              ),
+                              labelText: 'Distance',
+                            ),
+                          ),
+                          const SizedBox(height: 75.0),
+                          OutlinedButton(
+                            onPressed: () => selectDate(context),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              side: const BorderSide(
+                                  color: Colors.black, width: 1),
+                            ),
+                            child: Text(
+                              selectedDate != null
+                                  ? DateFormat('yyyy-MM-dd')
+                                      .format(selectedDate!)
+                                  : 'Select date',
+                            ),
+                          )
+                        ],
+                      ))))
+        ]));
   }
 
   AppBar appBar(BuildContext context) {
@@ -91,5 +125,19 @@ class JourneysState extends State<Journeys> {
       centerTitle: true,
       elevation: 0.0,
     );
+  }
+
+  void selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
   }
 }
