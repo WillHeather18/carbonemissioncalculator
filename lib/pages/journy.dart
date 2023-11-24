@@ -33,6 +33,44 @@ class JourneysState extends State<Journeys> {
                         children: [
                           Column(
                             children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: IconButton(
+                                      icon: const Icon(
+                                          Icons.directions_car_filled_outlined),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: IconButton(
+                                      icon: const Icon(
+                                          Icons.airplanemode_active_outlined),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200],
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: IconButton(
+                                      icon: const Icon(Icons.train_outlined),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                ],
+                              ),
                               const Text(
                                 'Vehicle Type',
                                 style: TextStyle(

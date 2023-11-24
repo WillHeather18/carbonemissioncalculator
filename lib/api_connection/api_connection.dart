@@ -7,7 +7,7 @@ import 'package:carbonemissioncalculator/widgets.dart';
 import 'package:carbonemissioncalculator/pages/login.dart';
 
 class API {
-  static const hostConnect = "http://192.168.0.91/cec_api";
+  static const hostConnect = "http://192.168.1.136/cec_api";
   static const hostConnectUser = "$hostConnect/user";
   static const hostConnectJourney = "$hostConnect/journey";
 
@@ -21,6 +21,9 @@ class API {
   static const getAllJournies = "$hostConnectJourney/get_all_entries.php";
   //get entries from date
   static const getJournies = "$hostConnectJourney/get_entries_from_date.php";
+  //het all entries from timeframe
+  static const getJourniesFromTimeframe =
+      "$hostConnectJourney/get_all_entries_timeframe.php";
   //delete journey
   static const deleteJourney = "$hostConnectJourney/delete_entry.php";
   //edit journey
@@ -58,6 +61,30 @@ Future<List<TableRowData>> getEntriesFromDate(DateTime selectedTime) async {
     Uri.parse(API.getJournies),
     body: {
       "selectedDate": selectedTime.toString(),
+    },
+  );
+
+  if (res.statusCode == 200 && res.body.isNotEmpty) {
+    var responseBody = json.decode(res.body);
+    if (responseBody is Map<String, dynamic> && responseBody['success']) {
+      List<TableRowData> tableRows = (responseBody['journeys'] as List)
+          .map((data) => TableRowData.fromJson(data))
+          .toList();
+      return tableRows;
+    } else {
+      return [];
+    }
+  } else {
+    throw Exception('Failed to load entries');
+  }
+}
+
+//get all entries from a selected timeframe
+Future<List<TableRowData>> getEntriesFromTimeframe(String time) async {
+  var res = await http.post(
+    Uri.parse(API.getJourniesFromTimeframe),
+    body: {
+      "timeframe": time,
     },
   );
 
