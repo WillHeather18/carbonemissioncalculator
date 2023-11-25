@@ -13,6 +13,13 @@ class JourneysState extends State<Journeys> {
   String carType = 'Petrol Car';
   DateTime? selectedDate;
   final TextEditingController distanceController = TextEditingController();
+  Map<String, int> vehicleCo2 = {
+    'Petrol Car': 170,
+    'Diesel Car': 171,
+    'Electric Car': 47,
+    'Train': 35,
+    'Plane': 193,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +145,16 @@ class JourneysState extends State<Journeys> {
                             onPressed: () {
                               if (selectedDate != null &&
                                   distanceController.text.isNotEmpty) {
-                                submitJourney(context, carType,
-                                    distanceController.text, selectedDate!);
+                                String co2 =
+                                    ((int.parse(distanceController.text)) *
+                                            vehicleCo2[carType]!)
+                                        .toString();
+                                submitJourney(
+                                    context,
+                                    carType,
+                                    distanceController.text,
+                                    selectedDate!,
+                                    co2);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

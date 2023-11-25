@@ -34,9 +34,11 @@ class PieChartWidget extends StatelessWidget {
       future: vehicleDistributionFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
+        } else if (!snapshot.hasData) {
+          return const Text('No data');
         } else {
           List<PieChartSectionData> sections =
               snapshot.data!.entries.map((entry) {
@@ -52,7 +54,7 @@ class PieChartWidget extends StatelessWidget {
           return PieChart(
             PieChartData(
               sectionsSpace: 0,
-              centerSpaceRadius: 40,
+              centerSpaceRadius: 20,
               sections: sections,
             ),
           );

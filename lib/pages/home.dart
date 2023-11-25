@@ -1,11 +1,22 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:carbonemissioncalculator/tablerowdata.dart';
 import 'package:carbonemissioncalculator/widgets.dart';
 import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
 
-class Overview extends StatelessWidget {
+class Overview extends StatefulWidget {
+  @override
+  OverviewState createState() => OverviewState();
+}
+
+class OverviewState extends State<Overview> {
+  String currentTimeframe = 'week';
+  final List<String> timeframes = ['week', 'month', 'year', 'all time'];
+
   @override
   Widget build(BuildContext context) {
+    print('Current Timeframe: $currentTimeframe');
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: appBar(context),
@@ -14,12 +25,83 @@ class Overview extends StatelessWidget {
             Container(
               decoration: const BoxDecoration(color: Colors.white),
             ),
-            Container(
-                height: 450,
-                child: Center(
-                    child: PieChartWidget(
-                        vehicleDistributionFuture:
-                            calculateVehicleTypeDistribution())))
+            const Padding(
+              padding: EdgeInsets.only(top: 170.0, left: 25.0),
+              child: Text(
+                'Vehicle Distribution',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Inter'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 180, bottom: 220),
+              child: PieChartWidget(
+                  vehicleDistributionFuture:
+                      calculateVehicleTypeDistribution(currentTimeframe)),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 250.0, top: 170),
+              child: Column(
+                children: [
+                  const Text("Total CO2",
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Inter')),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: FutureBuilder<String>(
+                      future: GetTotalCO2(currentTimeframe),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else {
+                          if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            return Text('${snapshot.data}',
+                                style: const TextStyle(
+                                    fontSize: 40,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight
+                                        .bold)); // snapshot.data is your total CO2
+                          }
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, top: 100),
+              child: DropdownButton<String>(
+                value: currentTimeframe,
+                icon: const Icon(Icons.arrow_downward),
+                iconSize: 24,
+                elevation: 16,
+                style: const TextStyle(color: Colors.deepPurple),
+                underline: Container(
+                  height: 2,
+                  color: Colors.deepPurpleAccent,
+                ),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    currentTimeframe = newValue ?? currentTimeframe;
+                  });
+                },
+                items: timeframes.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ),
           ],
         ));
   }
@@ -40,8 +122,9 @@ class Overview extends StatelessWidget {
     );
   }
 
-  Future<Map<String, double>> calculateVehicleTypeDistribution() async {
-    List<TableRowData> rows = await getAllEntries();
+  Future<Map<String, double>> calculateVehicleTypeDistribution(
+      String time) async {
+    List<TableRowData> rows = await getEntriesFromTimeframe(time);
     Map<String, int> counts = {};
     int total = 0;
 
@@ -61,5 +144,16 @@ class Overview extends StatelessWidget {
     });
 
     return distribution;
+  }
+
+  Future<String> GetTotalCO2(String time) async {
+    List<TableRowData> rows = await getEntriesFromTimeframe(time);
+    int total = 0;
+
+    for (var row in rows) {
+      int co2 = int.parse(row.co2);
+      total += co2;
+    }
+    return total.toString();
   }
 }

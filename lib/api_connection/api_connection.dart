@@ -21,6 +21,9 @@ class API {
   static const getAllJournies = "$hostConnectJourney/get_all_entries.php";
   //get entries from date
   static const getJournies = "$hostConnectJourney/get_entries_from_date.php";
+  //get entries from timeframe
+  static const getJourniesFromTimeframe =
+      "$hostConnectJourney/get_entries_from_timeframe.php";
   //delete journey
   static const deleteJourney = "$hostConnectJourney/delete_entry.php";
   //edit journey
@@ -76,15 +79,40 @@ Future<List<TableRowData>> getEntriesFromDate(DateTime selectedTime) async {
   }
 }
 
+//Get all Entries from a slelected timeframe
+Future<List<TableRowData>> getEntriesFromTimeframe(String time) async {
+  var res = await http.post(
+    Uri.parse(API.getJourniesFromTimeframe),
+    body: {
+      "timeframe": time,
+    },
+  );
+
+  if (res.statusCode == 200 && res.body.isNotEmpty) {
+    var responseBody = json.decode(res.body);
+    if (responseBody is Map<String, dynamic> && responseBody['success']) {
+      List<TableRowData> tableRows = (responseBody['journeys'] as List)
+          .map((data) => TableRowData.fromJson(data))
+          .toList();
+      return tableRows;
+    } else {
+      return [];
+    }
+  } else {
+    throw Exception('Failed to load entries');
+  }
+}
+
 //Submit entry
 void submitJourney(BuildContext context, String vehicleType, String distance,
-    DateTime selectedDate) async {
+    DateTime selectedDate, String co2) async {
   var res = await http.post(
     Uri.parse(API.addJourney),
     body: {
       "vehicleType": vehicleType,
       "distance": distance,
       "selectedDate": selectedDate.toString(),
+      "co2": co2,
     },
   );
 

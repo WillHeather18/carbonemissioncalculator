@@ -6,6 +6,7 @@ class TableRowData {
   String? selectedDistance;
   final String date;
   String? selectedDate;
+  final String co2;
 
   TableRowData(
       {required this.id,
@@ -14,7 +15,8 @@ class TableRowData {
       required this.distance,
       this.selectedDistance,
       required this.date,
-      this.selectedDate});
+      this.selectedDate,
+      required this.co2});
 
   factory TableRowData.fromJson(Map<String, dynamic> json) {
     return TableRowData(
@@ -23,6 +25,7 @@ class TableRowData {
       selectedType: json['journey_type'],
       distance: json['distance_travelled'],
       date: json['journey_date'],
+      co2: json['co2'],
     );
   }
 }
