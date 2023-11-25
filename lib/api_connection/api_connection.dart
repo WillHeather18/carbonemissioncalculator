@@ -7,7 +7,7 @@ import 'package:carbonemissioncalculator/widgets.dart';
 import 'package:carbonemissioncalculator/pages/login.dart';
 
 class API {
-  static const hostConnect = "http://192.168.1.136/cec_api";
+  static const hostConnect = "http://192.168.0.91/cec_api";
   static const hostConnectUser = "$hostConnect/user";
   static const hostConnectJourney = "$hostConnect/journey";
 
@@ -21,15 +21,9 @@ class API {
   static const getAllJournies = "$hostConnectJourney/get_all_entries.php";
   //get entries from date
   static const getJournies = "$hostConnectJourney/get_entries_from_date.php";
-<<<<<<< HEAD
   //get entries from timeframe
   static const getJourniesFromTimeframe =
       "$hostConnectJourney/get_entries_from_timeframe.php";
-=======
-  //het all entries from timeframe
-  static const getJourniesFromTimeframe =
-      "$hostConnectJourney/get_all_entries_timeframe.php";
->>>>>>> 5c853cb215103a6adda5c33c24b218512e4928e5
   //delete journey
   static const deleteJourney = "$hostConnectJourney/delete_entry.php";
   //edit journey
@@ -85,11 +79,7 @@ Future<List<TableRowData>> getEntriesFromDate(DateTime selectedTime) async {
   }
 }
 
-<<<<<<< HEAD
 //Get all Entries from a slelected timeframe
-=======
-//get all entries from a selected timeframe
->>>>>>> 5c853cb215103a6adda5c33c24b218512e4928e5
 Future<List<TableRowData>> getEntriesFromTimeframe(String time) async {
   var res = await http.post(
     Uri.parse(API.getJourniesFromTimeframe),

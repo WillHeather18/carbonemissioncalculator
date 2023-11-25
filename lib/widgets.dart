@@ -24,13 +24,12 @@ class CustomWidgets {
 }
 
 class PieChartWidget extends StatelessWidget {
-  final Map<String, double> vehicleDistribution;
+  final Future<Map<String, double>> vehicleDistributionFuture;
 
-  PieChartWidget({required this.vehicleDistribution});
+  PieChartWidget({required this.vehicleDistributionFuture});
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
     return FutureBuilder<Map<String, double>>(
       future: vehicleDistributionFuture,
       builder: (context, snapshot) {
@@ -61,25 +60,6 @@ class PieChartWidget extends StatelessWidget {
           );
         }
       },
-=======
-    List<PieChartSectionData> sections =
-        vehicleDistribution.entries.map((entry) {
-      return PieChartSectionData(
-        color: Colors
-            .primaries[vehicleDistribution.keys.toList().indexOf(entry.key)],
-        value: entry.value,
-        title: entry.key,
-        radius: 40,
-      );
-    }).toList();
-
-    return PieChart(
-      PieChartData(
-        sectionsSpace: 0,
-        centerSpaceRadius: 40,
-        sections: sections,
-      ),
->>>>>>> 5c853cb215103a6adda5c33c24b218512e4928e5
     );
   }
 }

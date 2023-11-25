@@ -6,23 +6,14 @@ import 'package:carbonemissioncalculator/widgets.dart';
 import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
 
 class Overview extends StatefulWidget {
-<<<<<<< HEAD
-=======
-  const Overview({super.key});
-
->>>>>>> 5c853cb215103a6adda5c33c24b218512e4928e5
   @override
   OverviewState createState() => OverviewState();
 }
 
 class OverviewState extends State<Overview> {
-<<<<<<< HEAD
   String currentTimeframe = 'week';
   final List<String> timeframes = ['week', 'month', 'year', 'all time'];
 
-=======
-  late String selectedTimeframe = "week";
->>>>>>> 5c853cb215103a6adda5c33c24b218512e4928e5
   @override
   Widget build(BuildContext context) {
     print('Current Timeframe: $currentTimeframe');
@@ -34,7 +25,6 @@ class OverviewState extends State<Overview> {
             Container(
               decoration: const BoxDecoration(color: Colors.white),
             ),
-<<<<<<< HEAD
             const Padding(
               padding: EdgeInsets.only(top: 170.0, left: 25.0),
               child: Text(
@@ -112,126 +102,8 @@ class OverviewState extends State<Overview> {
                 }).toList(),
               ),
             ),
-=======
-            Padding(
-                padding: const EdgeInsets.only(top: 85),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF04471C),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: TextButton(
-                        child: const Text(
-                          'Week',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () {
-                          buttonPressed('week');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('week')),
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF04471C),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: TextButton(
-                        child: const Text(
-                          'Month',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () {
-                          buttonPressed('month');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('month')),
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF04471C),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: TextButton(
-                        child: const Text(
-                          'Year',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () {
-                          buttonPressed('year');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('year')),
-                          );
-                        },
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF04471C),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: TextButton(
-                        child: const Text(
-                          'All-Time',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () {
-                          buttonPressed('all');
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('all')),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                )),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 200),
-              child: Center(
-                  child: FutureBuilder<Map<String, double>>(
-                future: calculateVehicleTypeDistribution(selectedTimeframe),
-                builder: (BuildContext context,
-                    AsyncSnapshot<Map<String, double>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator(); // show a loading spinner while waiting
-                  } else if (snapshot.hasError) {
-                    return Text(
-                        'Error: ${snapshot.error}'); // show error message if any error occurred
-                  } else if (snapshot.data!.isEmpty) {
-                    return const Text(
-                        'No data available'); // show error message if any error occurred
-                  } else {
-                    return PieChartWidget(
-                        vehicleDistribution: snapshot
-                            .data!); // show pie chart if data is available
-                  }
-                },
-              )),
-            )
->>>>>>> 5c853cb215103a6adda5c33c24b218512e4928e5
           ],
         ));
-  }
-
-  void buttonPressed(String time) {
-    setState(() {
-      selectedTimeframe = time;
-    });
   }
 
   AppBar appBar(BuildContext context) {
