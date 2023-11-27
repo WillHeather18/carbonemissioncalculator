@@ -12,7 +12,8 @@ class Login extends StatelessWidget {
     return Scaffold(
       body: Stack(children: [
         Container(
-          decoration: const BoxDecoration(color: Color(0xFF04471C)),
+          decoration:
+              BoxDecoration(color: Theme.of(context).colorScheme.background),
         ),
         const Padding(
           padding: EdgeInsets.only(top: 350.0, left: 50.0),

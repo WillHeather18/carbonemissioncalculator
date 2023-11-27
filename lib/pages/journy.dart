@@ -25,10 +25,11 @@ class JourneysState extends State<Journeys> {
   Widget build(BuildContext context) {
     return Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: appBar(context),
         body: Stack(children: [
           Container(
-            decoration: const BoxDecoration(color: Colors.white),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.background,
+            ),
           ),
           Padding(
               padding: const EdgeInsets.only(top: 120),
@@ -206,22 +207,6 @@ class JourneysState extends State<Journeys> {
                         ],
                       ))))
         ]));
-  }
-
-  AppBar appBar(BuildContext context) {
-    return AppBar(
-      title: const Text(
-        'Journeys',
-        style: TextStyle(
-            color: Color(0xFF04471C),
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Inter'),
-      ),
-      backgroundColor: Colors.transparent,
-      centerTitle: true,
-      elevation: 0.0,
-    );
   }
 
   void selectDate(BuildContext context) async {

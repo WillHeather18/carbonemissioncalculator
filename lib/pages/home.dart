@@ -16,14 +16,13 @@ class OverviewState extends State<Overview> {
 
   @override
   Widget build(BuildContext context) {
-    print('Current Timeframe: $currentTimeframe');
     return Scaffold(
         extendBodyBehindAppBar: true,
-        appBar: appBar(context),
         body: Stack(
           children: [
             Container(
-              decoration: const BoxDecoration(color: Colors.white),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.background),
             ),
             const Padding(
               padding: EdgeInsets.only(top: 170.0, left: 25.0),
@@ -81,13 +80,13 @@ class OverviewState extends State<Overview> {
               padding: const EdgeInsets.only(left: 20.0, top: 100),
               child: DropdownButton<String>(
                 value: currentTimeframe,
-                icon: const Icon(Icons.arrow_downward),
+                icon: Icon(Icons.arrow_downward),
                 iconSize: 24,
                 elevation: 16,
-                style: const TextStyle(color: Colors.deepPurple),
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 underline: Container(
                   height: 2,
-                  color: Colors.deepPurpleAccent,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 onChanged: (String? newValue) {
                   setState(() {
@@ -104,22 +103,6 @@ class OverviewState extends State<Overview> {
             ),
           ],
         ));
-  }
-
-  AppBar appBar(BuildContext context) {
-    return AppBar(
-      title: const Text(
-        'Overview',
-        style: TextStyle(
-            color: Color(0xFF04471C),
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Inter'),
-      ),
-      backgroundColor: Colors.transparent,
-      centerTitle: true,
-      elevation: 0.0,
-    );
   }
 
   Future<Map<String, double>> calculateVehicleTypeDistribution(

@@ -12,7 +12,18 @@ class MyHomePage extends StatefulWidget {
 
 class PageState extends State<MyHomePage> {
   int _currentPageIndex = 0;
-  final List<Widget> _pages = [Overview(), Journeys(), Entries(), Settings()];
+  late List<Widget> _pages;
+  final List<String> _pageTitles = [
+    'Overview',
+    'Journeys',
+    'Entries',
+    'Settings'
+  ]; // Add your page titles here
+  @override
+  void initState() {
+    super.initState();
+    _pages = [Overview(), Journeys(), Entries(), Settings()];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -24,6 +35,19 @@ class PageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         extendBody: true,
+        appBar: AppBar(
+          title: Text(
+            _pageTitles[_currentPageIndex],
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Inter'),
+          ),
+          backgroundColor: Colors.transparent,
+          centerTitle: true,
+          elevation: 0.0,
+        ),
         body: _pages[_currentPageIndex],
         bottomNavigationBar: Container(
             padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
@@ -31,27 +55,27 @@ class PageState extends State<MyHomePage> {
                 borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(40.0), bottom: Radius.circular(40.0)),
                 child: BottomNavigationBar(
-                  selectedItemColor: Colors.white,
+                  selectedItemColor: Theme.of(context).colorScheme.background,
                   unselectedItemColor: Colors.grey,
                   currentIndex: _currentPageIndex,
                   onTap: _onItemTapped,
-                  items: const <BottomNavigationBarItem>[
+                  items: <BottomNavigationBarItem>[
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.pie_chart_outline),
+                        icon: const Icon(Icons.pie_chart_outline),
                         label: 'Overview',
-                        backgroundColor: Color(0xFF04471C)),
+                        backgroundColor: Theme.of(context).colorScheme.primary),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.airplanemode_active),
+                        icon: const Icon(Icons.airplanemode_active),
                         label: 'Journeys',
-                        backgroundColor: Color(0xFF04471C)),
+                        backgroundColor: Theme.of(context).colorScheme.primary),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.list_alt),
+                        icon: const Icon(Icons.list_alt),
                         label: 'Entries',
-                        backgroundColor: Color(0xFF04471C)),
+                        backgroundColor: Theme.of(context).colorScheme.primary),
                     BottomNavigationBarItem(
-                        icon: Icon(Icons.settings),
+                        icon: const Icon(Icons.settings),
                         label: 'Settings',
-                        backgroundColor: Color(0xFF04471C)),
+                        backgroundColor: Theme.of(context).colorScheme.primary),
                   ],
                 ))));
   }

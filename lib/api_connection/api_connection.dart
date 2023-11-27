@@ -7,7 +7,7 @@ import 'package:carbonemissioncalculator/widgets.dart';
 import 'package:carbonemissioncalculator/pages/login.dart';
 
 class API {
-  static const hostConnect = "http://192.168.0.91/cec_api";
+  static const hostConnect = "http://10.124.182.85/cec_api";
   static const hostConnectUser = "$hostConnect/user";
   static const hostConnectJourney = "$hostConnect/journey";
 
@@ -28,6 +28,8 @@ class API {
   static const deleteJourney = "$hostConnectJourney/delete_entry.php";
   //edit journey
   static const editJourney = "$hostConnectJourney/edit_entry.php";
+  //update co2
+  static const updateCo2 = "$hostConnectJourney/update_co2.php";
 }
 
 // API Functions
@@ -153,6 +155,7 @@ void EditEntry(BuildContext context, TableRowData entry) async {
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Failed to edit entry')));
   }
+  updateCO2(context, entry);
 }
 
 //Delete entry
@@ -170,6 +173,29 @@ void DeleteEntry(BuildContext context, TableRowData entry) async {
   } else {
     ScaffoldMessenger.of(context)
         .showSnackBar(const SnackBar(content: Text('Failed to delete entry')));
+  }
+}
+
+// update co2
+void updateCO2(BuildContext context, TableRowData entry) async {
+  Map<String, int> vehicleCo2 = {
+    'Petrol Car': 170,
+    'Diesel Car': 171,
+    'Electric Car': 47,
+    'Train': 35,
+    'Plane': 193,
+  };
+  if (entry.selectedDistance != null) {
+    int co2 = ((int.parse(entry.selectedDistance ?? entry.distance)) *
+        vehicleCo2[entry.type]!);
+
+    await http.post(
+      Uri.parse(API.updateCo2),
+      body: {
+        "co2": co2.toString(),
+        "id": entry.id,
+      },
+    );
   }
 }
 

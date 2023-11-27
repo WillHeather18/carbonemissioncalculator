@@ -22,11 +22,11 @@ class EntriesState extends State<Entries> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: appBar(context),
       body: Stack(
         children: [
           Container(
-            decoration: const BoxDecoration(color: Colors.white),
+            decoration:
+                BoxDecoration(color: Theme.of(context).colorScheme.background),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 75),
@@ -45,21 +45,6 @@ class EntriesState extends State<Entries> {
           ),
         ],
       ),
-    );
-  }
-
-  AppBar appBar(BuildContext context) {
-    return AppBar(
-      title: const Text(
-        'Entries',
-        style: TextStyle(
-            color: Color(0xFF04471C),
-            fontSize: 18,
-            fontWeight: FontWeight.bold),
-      ),
-      backgroundColor: Colors.transparent,
-      centerTitle: true,
-      elevation: 0.0,
     );
   }
 }
