@@ -7,7 +7,7 @@ import 'package:carbonemissioncalculator/widgets.dart';
 import 'package:carbonemissioncalculator/pages/login.dart';
 
 class API {
-  static const hostConnect = "http://10.124.182.85/cec_api";
+  static const hostConnect = "http://192.168.1.188/cec_api";
   static const hostConnectUser = "$hostConnect/user";
   static const hostConnectJourney = "$hostConnect/journey";
 

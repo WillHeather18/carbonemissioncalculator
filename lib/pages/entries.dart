@@ -28,20 +28,17 @@ class EntriesState extends State<Entries> {
             decoration:
                 BoxDecoration(color: Theme.of(context).colorScheme.background),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 75),
-            child: Column(
-              children: [
-                HorizontalDatePicker(
-                  onSelected: (DateTime time) {
-                    setState(() {
-                      selectedTime = time;
-                    });
-                  },
-                ),
-                EntriesSection(selectedTime: selectedTime),
-              ],
-            ),
+          Column(
+            children: [
+              HorizontalDatePicker(
+                onSelected: (DateTime time) {
+                  setState(() {
+                    selectedTime = time;
+                  });
+                },
+              ),
+              EntriesSection(selectedTime: selectedTime),
+            ],
           ),
         ],
       ),

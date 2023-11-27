@@ -13,8 +13,7 @@ class Signup extends StatelessWidget {
     return Scaffold(
       body: Stack(children: [
         Container(
-          decoration:
-              BoxDecoration(color: Theme.of(context).colorScheme.background),
+          decoration: const BoxDecoration(color: Color(0xFF04471C)),
         ),
         const Padding(
           padding: EdgeInsets.only(top: 350.0, left: 50.0),

@@ -25,7 +25,7 @@ class OverviewState extends State<Overview> {
                   color: Theme.of(context).colorScheme.background),
             ),
             const Padding(
-              padding: EdgeInsets.only(top: 170.0, left: 25.0),
+              padding: EdgeInsets.only(top: 60, left: 25.0),
               child: Text(
                 'Vehicle Distribution',
                 style: TextStyle(
@@ -35,13 +35,13 @@ class OverviewState extends State<Overview> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 180, bottom: 220),
+              padding: const EdgeInsets.only(right: 200, bottom: 340),
               child: PieChartWidget(
                   vehicleDistributionFuture:
                       calculateVehicleTypeDistribution(currentTimeframe)),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 250.0, top: 170),
+              padding: const EdgeInsets.only(left: 250.0, top: 60),
               child: Column(
                 children: [
                   const Text("Total CO2",
@@ -50,7 +50,7 @@ class OverviewState extends State<Overview> {
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Inter')),
                   Padding(
-                    padding: const EdgeInsets.only(top: 50),
+                    padding: const EdgeInsets.only(top: 65),
                     child: FutureBuilder<String>(
                       future: GetTotalCO2(currentTimeframe),
                       builder: (BuildContext context,
@@ -77,7 +77,7 @@ class OverviewState extends State<Overview> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, top: 100),
+              padding: const EdgeInsets.only(left: 20.0),
               child: DropdownButton<String>(
                 value: currentTimeframe,
                 icon: Icon(Icons.arrow_downward),
