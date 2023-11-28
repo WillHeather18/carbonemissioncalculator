@@ -235,11 +235,11 @@ void SignupVerification(BuildContext context, username, password) async {
   if (res.statusCode == 200 && res.body.isNotEmpty) {
     var responseBodyOfLogin = jsonDecode(res.body);
     if (responseBodyOfLogin['success'] == true) {
-      CustomWidgets.ShowErrorDialog(context, "Account created successfully");
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Login()),
       );
+      CustomWidgets.ShowErrorDialog(context, "Account created successfully");
     } else if (responseBodyOfLogin['message'] == "Username already exists") {
       CustomWidgets.ShowErrorDialog(context, "Username already exists");
     } else {

@@ -2,6 +2,7 @@ import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
 import 'package:carbonemissioncalculator/pages/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Login extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
@@ -15,8 +16,29 @@ class Login extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(color: Color(0xFF04471C)),
         ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 35),
+            child: Column(
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/Greenlogo.svg',
+                  semanticsLabel: 'SVG Image',
+                  width: 125.0,
+                  height: 125.0,
+                ),
+                const SizedBox(height: 15.0),
+                const Text("Carbon Emissions Calculator",
+                    style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontSize: 20.0,
+                        color: Colors.white))
+              ],
+            ),
+          ),
+        ),
         SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 300, left: 50.0, right: 50.0),
+          padding: const EdgeInsets.only(top: 325, left: 50.0, right: 50.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
