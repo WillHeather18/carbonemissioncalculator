@@ -2,6 +2,9 @@ import 'package:carbonemissioncalculator/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
+import 'package:carbonemissioncalculator/widgets.dart';
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 
 class Signup extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
@@ -70,7 +73,21 @@ class Signup extends StatelessWidget {
                   String username = _usernameController.text;
                   String password = _passwordController.text;
                   String repassword = _repasswordController.text;
-                  SignupVerification(context, username, password, repassword);
+                  if (!isValidPassword(password)) {
+                    CustomWidgets.ShowErrorDialog(
+                        context,
+                        "Password must meet the following requirements:\n"
+                        "- At least 8 characters long\n"
+                        "- Contains at least one uppercase letter\n"
+                        "- Contains at least one lowercase letter\n"
+                        "- Contains at least one number");
+                  } else if (password == repassword) {
+                    SignupVerification(
+                        context, username, hashPassword(password));
+                  } else {
+                    CustomWidgets.ShowErrorDialog(
+                        context, "Passwords do not match");
+                  }
                 },
                 style: ButtonStyle(
                   backgroundColor:
@@ -107,4 +124,18 @@ class Signup extends StatelessWidget {
       ]),
     );
   }
+
+  bool isValidPassword(String password) {
+    bool hasUppercase = password.contains(RegExp(r'[A-Z]'));
+    bool hasDigits = password.contains(RegExp(r'[0-9]'));
+    bool hasLowercase = password.contains(RegExp(r'[a-z]'));
+    bool hasMinLength = password.length >= 8;
+    return hasDigits & hasUppercase & hasLowercase & hasMinLength;
+  }
+}
+
+String hashPassword(String password) {
+  var bytes = utf8.encode(password);
+  var digest = sha256.convert(bytes);
+  return digest.toString();
 }

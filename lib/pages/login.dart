@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 class Login extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FocusNode _passwordFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -14,21 +15,25 @@ class Login extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(color: Color(0xFF04471C)),
         ),
-        const Padding(
-          padding: EdgeInsets.only(top: 350.0, left: 50.0),
-          child: Text(
-            'Login',
-            style: TextStyle(
-                fontFamily: 'Inter', fontSize: 48.0, color: Colors.white),
-          ),
-        ),
-        Padding(
+        SingleChildScrollView(
           padding: const EdgeInsets.only(top: 300, left: 50.0, right: 50.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Padding(
+                padding: EdgeInsets.only(right: 150.0),
+                child: Text(
+                  'Login',
+                  style: TextStyle(
+                      fontFamily: 'Inter', fontSize: 48.0, color: Colors.white),
+                ),
+              ),
+              const SizedBox(height: 20.0),
               TextField(
                 controller: _usernameController,
+                onSubmitted: (value) {
+                  FocusScope.of(context).requestFocus(_passwordFocusNode);
+                },
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(45.0),
@@ -41,6 +46,12 @@ class Login extends StatelessWidget {
               TextField(
                 controller: _passwordController,
                 obscureText: true,
+                focusNode: _passwordFocusNode,
+                onSubmitted: (value) {
+                  String username = _usernameController.text;
+                  String password = _passwordController.text;
+                  LoginVerification(context, username, hashPassword(password));
+                },
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(45.0),
@@ -55,7 +66,7 @@ class Login extends StatelessWidget {
                 onPressed: () {
                   String username = _usernameController.text;
                   String password = _passwordController.text;
-                  LoginVerification(context, username, password);
+                  LoginVerification(context, username, hashPassword(password));
                 },
                 style: ButtonStyle(
                   backgroundColor:

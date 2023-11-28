@@ -7,7 +7,7 @@ import 'package:carbonemissioncalculator/widgets.dart';
 import 'package:carbonemissioncalculator/pages/login.dart';
 
 class API {
-  static const hostConnect = "http://192.168.1.188/cec_api";
+  static const hostConnect = "http://10.124.129.67/cec_api";
   static const hostConnectUser = "$hostConnect/user";
   static const hostConnectJourney = "$hostConnect/journey";
 
@@ -223,32 +223,29 @@ void LoginVerification(BuildContext context, username, password) async {
 }
 
 //Signup user
-void SignupVerification(
-    BuildContext context, username, password, repassword) async {
-  if (password == repassword) {
-    var res = await http.post(
-      Uri.parse(API.signup),
-      body: {
-        "username": username,
-        "password": password,
-      },
-    );
+void SignupVerification(BuildContext context, username, password) async {
+  var res = await http.post(
+    Uri.parse(API.signup),
+    body: {
+      "username": username,
+      "password": password,
+    },
+  );
 
-    if (res.statusCode == 200 && res.body.isNotEmpty) {
-      var responseBodyOfLogin = jsonDecode(res.body);
-      if (responseBodyOfLogin['success'] == true) {
-        CustomWidgets.ShowErrorDialog(context, "Account created successfully");
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Login()),
-        );
-      } else {
-        CustomWidgets.ShowErrorDialog(context, "Error creating account");
-      }
+  if (res.statusCode == 200 && res.body.isNotEmpty) {
+    var responseBodyOfLogin = jsonDecode(res.body);
+    if (responseBodyOfLogin['success'] == true) {
+      CustomWidgets.ShowErrorDialog(context, "Account created successfully");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
+    } else if (responseBodyOfLogin['message'] == "Username already exists") {
+      CustomWidgets.ShowErrorDialog(context, "Username already exists");
     } else {
       CustomWidgets.ShowErrorDialog(context, "Error connecting to server");
     }
   } else {
-    CustomWidgets.ShowErrorDialog(context, "Passwords do not match");
+    CustomWidgets.ShowErrorDialog(context, "Error connecting to server");
   }
 }
