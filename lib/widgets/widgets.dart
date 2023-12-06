@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
@@ -89,7 +91,7 @@ class LineChartWidget extends StatelessWidget {
   final Future<List<FlSpot>> lineChartData;
   final String timeframe;
 
-  LineChartWidget(
+  const LineChartWidget(
       {super.key, required this.lineChartData, required this.timeframe});
 
   @override

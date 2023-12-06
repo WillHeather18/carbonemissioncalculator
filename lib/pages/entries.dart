@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, non_constant_identifier_names, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:carbonemissioncalculator/widgets/monthselector.dart';
 import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
@@ -19,6 +21,7 @@ class EntriesState extends State<Entries> {
     selectedTime = DateTime.now(); // Initialize selectedTime
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -49,7 +52,7 @@ class EntriesState extends State<Entries> {
 class EntriesSection extends StatefulWidget {
   final DateTime selectedTime;
 
-  const EntriesSection({required this.selectedTime});
+  const EntriesSection({super.key, required this.selectedTime});
 
   @override
   _EntriesSectionState createState() => _EntriesSectionState();

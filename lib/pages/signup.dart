@@ -1,18 +1,30 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:carbonemissioncalculator/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
-import 'package:carbonemissioncalculator/widgets.dart';
+import 'package:carbonemissioncalculator/widgets/widgets.dart';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Signup extends StatelessWidget {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _repasswordController = TextEditingController();
-  final FocusNode _passwordFocusNode = FocusNode();
+  final TextEditingController _emailController =
+      TextEditingController(); // Text field controller for email
+  final TextEditingController _usernameController =
+      TextEditingController(); // Text field controller for username
+  final TextEditingController _passwordController =
+      TextEditingController(); // Text field controller for password
+  final TextEditingController _repasswordController =
+      TextEditingController(); // Text field controller for re-entered password
+  final FocusNode _usernameFocusNode =
+      FocusNode(); // Focus node for username text field
+  final FocusNode _passwordFocusNode =
+      FocusNode(); // Focus node for password text field
   final FocusNode _repasswordFocusNode = FocusNode();
+
+  Signup({super.key}); // Focus node for re-entered password text field
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +56,7 @@ class Signup extends StatelessWidget {
         ),
         SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top: 325, left: 50.0, right: 50.0),
+            padding: const EdgeInsets.only(top: 250, left: 50.0, right: 50.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -60,7 +72,23 @@ class Signup extends StatelessWidget {
                 ),
                 const SizedBox(height: 20.0),
                 TextField(
+                  controller: _emailController,
+                  onSubmitted: (value) {
+                    FocusScope.of(context).requestFocus(_usernameFocusNode);
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(45.0),
+                      ),
+                      labelText: 'Email',
+                      filled: true,
+                      fillColor: Colors.white),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 16.0),
+                TextField(
                   controller: _usernameController,
+                  focusNode: _usernameFocusNode,
                   onSubmitted: (value) {
                     FocusScope.of(context).requestFocus(_passwordFocusNode);
                   },
@@ -149,6 +177,7 @@ class Signup extends StatelessWidget {
   }
 
   void PasswordVerification(BuildContext context) {
+    String email = _emailController.text;
     String username = _usernameController.text;
     String password = _passwordController.text;
     String repassword = _repasswordController.text;
@@ -161,17 +190,21 @@ class Signup extends StatelessWidget {
           "- Contains at least one lowercase letter\n"
           "- Contains at least one number");
     } else if (password == repassword) {
-      SignupVerification(context, username, hashPassword(password));
+      SignupVerification(context, email, username, hashPassword(password));
     } else {
       CustomWidgets.ShowErrorDialog(context, "Passwords do not match");
     }
   }
 
   bool isValidPassword(String password) {
-    bool hasUppercase = password.contains(RegExp(r'[A-Z]'));
-    bool hasDigits = password.contains(RegExp(r'[0-9]'));
-    bool hasLowercase = password.contains(RegExp(r'[a-z]'));
-    bool hasMinLength = password.length >= 8;
+    bool hasUppercase = password.contains(RegExp(
+        r'[A-Z]')); // Check if password contains at least one uppercase letter
+    bool hasDigits = password.contains(
+        RegExp(r'[0-9]')); // Check if password contains at least one digit
+    bool hasLowercase = password.contains(RegExp(
+        r'[a-z]')); // Check if password contains at least one lowercase letter
+    bool hasMinLength =
+        password.length >= 8; // Check if password is at least 8 characters long
     return hasDigits & hasUppercase & hasLowercase & hasMinLength;
   }
 }

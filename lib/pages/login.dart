@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:carbonemissioncalculator/api_connection/api_connection.dart';
 import 'package:carbonemissioncalculator/pages/signup.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,8 @@ class Login extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _passwordFocusNode = FocusNode();
+
+  Login({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,7 @@ class Login extends StatelessWidget {
           ),
         ),
         SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 325, left: 50.0, right: 50.0),
+          padding: const EdgeInsets.only(top: 250, left: 50.0, right: 50.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -60,7 +64,7 @@ class Login extends StatelessWidget {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(45.0),
                     ),
-                    labelText: 'Username',
+                    labelText: 'Username or Email',
                     filled: true,
                     fillColor: Colors.white),
               ),

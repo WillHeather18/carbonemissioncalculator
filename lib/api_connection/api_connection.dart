@@ -1,9 +1,11 @@
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:carbonemissioncalculator/tablerowdata.dart';
 import 'package:flutter/material.dart';
 import 'package:carbonemissioncalculator/pagestate.dart';
-import 'package:carbonemissioncalculator/widgets.dart';
+import 'package:carbonemissioncalculator/widgets/widgets.dart';
 import 'package:carbonemissioncalculator/pages/login.dart';
 
 class API {
@@ -57,7 +59,8 @@ Future<List<TableRowData>> getAllEntries() async {
   }
 }
 
-//Get all Entries from a slelected month
+//Get all Entries from a selected month
+
 Future<List<TableRowData>> getEntriesFromDate(DateTime selectedTime) async {
   var res = await http.post(
     Uri.parse(API.getJournies),
@@ -214,7 +217,7 @@ void LoginVerification(BuildContext context, username, password) async {
     if (responseBodyOfLogin['success'] == true) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MyHomePage()),
+        MaterialPageRoute(builder: (context) => const MyHomePage()),
       );
     } else {
       CustomWidgets.ShowErrorDialog(context, "Invalid username or password");
@@ -223,10 +226,11 @@ void LoginVerification(BuildContext context, username, password) async {
 }
 
 //Signup user
-void SignupVerification(BuildContext context, username, password) async {
+void SignupVerification(BuildContext context, email, username, password) async {
   var res = await http.post(
     Uri.parse(API.signup),
     body: {
+      "email": email,
       "username": username,
       "password": password,
     },
@@ -239,9 +243,14 @@ void SignupVerification(BuildContext context, username, password) async {
         context,
         MaterialPageRoute(builder: (context) => Login()),
       );
-      CustomWidgets.ShowErrorDialog(context, "Account created successfully");
-    } else if (responseBodyOfLogin['message'] == "Username already exists") {
-      CustomWidgets.ShowErrorDialog(context, "Username already exists");
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Account created successfully')));
+    } else if (responseBodyOfLogin['message'] ==
+        "Username or Email already exists") {
+      CustomWidgets.ShowErrorDialog(
+          context, "Username or Email already exists");
+    } else if (responseBodyOfLogin['message'] == "Invalid email format") {
+      CustomWidgets.ShowErrorDialog(context, "Invalid email format");
     } else {
       CustomWidgets.ShowErrorDialog(context, "Error connecting to server");
     }
