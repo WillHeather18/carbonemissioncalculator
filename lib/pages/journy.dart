@@ -37,45 +37,9 @@ class JourneysState extends State<Journeys> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      const SizedBox(height: 50.0),
                       Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: IconButton(
-                                  icon: const Icon(
-                                      Icons.directions_car_filled_outlined),
-                                  onPressed: () {},
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: IconButton(
-                                  icon: const Icon(
-                                      Icons.airplanemode_active_outlined),
-                                  onPressed: () {},
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: IconButton(
-                                  icon: const Icon(Icons.train_outlined),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ],
-                          ),
                           const Text(
                             'Vehicle Type',
                             style: TextStyle(
@@ -88,10 +52,13 @@ class JourneysState extends State<Journeys> {
                               decoration: const InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black),
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(
+                                          10.0)), // Set border radius here
                                 ),
                               ),
                               child: SizedBox(
-                                  height: 15.0,
+                                  height: 20.0,
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: carType,
@@ -143,6 +110,8 @@ class JourneysState extends State<Journeys> {
                             decoration: const InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
                               ),
                             ),
                           ),

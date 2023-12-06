@@ -27,7 +27,7 @@ class Signup extends StatelessWidget {
             child: Column(
               children: [
                 SvgPicture.asset(
-                  'assets/icons/Greenlogo.svg',
+                  'assets/icons/Whitelogo.svg',
                   semanticsLabel: 'SVG Image',
                   width: 125.0,
                   height: 125.0,

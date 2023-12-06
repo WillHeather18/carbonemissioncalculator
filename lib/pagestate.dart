@@ -2,7 +2,7 @@ import 'package:carbonemissioncalculator/pages/entries.dart';
 import 'package:carbonemissioncalculator/pages/home.dart';
 import 'package:carbonemissioncalculator/pages/journy.dart';
 import 'package:carbonemissioncalculator/pages/settings.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -36,6 +36,8 @@ class PageState extends State<MyHomePage> {
     return Scaffold(
         extendBody: true,
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
           title: Text(
             _pageTitles[_currentPageIndex],
             style: TextStyle(
@@ -44,9 +46,32 @@ class PageState extends State<MyHomePage> {
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Inter'),
           ),
-          backgroundColor: Colors.transparent,
+          actions: [
+            SizedBox(
+              height: 50,
+              width: 50,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  Theme.of(context).brightness == Brightness.dark
+                      ? 'assets/icons/Whitelogo.svg'
+                      : 'assets/icons/Greenlogo.svg',
+                ),
+              ),
+            )
+          ],
+          leading: IconButton(
+            icon: Icon(
+              Icons.home,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: () {
+              setState(() {
+                _currentPageIndex = 0;
+              });
+            },
+          ),
           centerTitle: true,
-          elevation: 0.0,
         ),
         body: _pages[_currentPageIndex],
         bottomNavigationBar: Container(

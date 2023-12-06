@@ -1,4 +1,5 @@
 import 'package:carbonemissioncalculator/pages/login.dart';
+import 'package:carbonemissioncalculator/pagestate.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeNotifier.isLightTheme ? Themes.light : Themes.dark,
-      home: Login(),
+      home: MyHomePage(),
     );
   }
 }
